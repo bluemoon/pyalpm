@@ -215,35 +215,9 @@ PyObject * option_get_logfile_alpm(PyObject *self)
   }
 }
 
-PyObject * option_set_xfercommand_alpm(PyObject *self, PyObject *args)
-{
-  const char *cmd;
-  if(!PyArg_ParseTuple(args, "s", &cmd))
-  {
-    PyErr_SetString(alpm_error, "error in the args");
-    return NULL;
-  }
-  else
-  {
-    alpm_option_set_xfercommand(cmd);
-    return Py_None;
-  }
-}
 
-PyObject * option_get_xfercommand_alpm(PyObject *self)
-{
-  const char *str = alpm_option_get_xfercommand();
-  
-  if(str == NULL)
-  {
-    PyErr_SetString(alpm_error, "failed getting xfercommand.");
-    return NULL;
-  }
-  else
-  {
-    return Py_BuildValue("s", str);
-  }
-}
+
+
 
 /*
 receives and returns an int type
@@ -615,53 +589,6 @@ PyObject * option_remove_ignoregrps_alpm(PyObject *self, PyObject *args)
   }
 }
 
-PyObject * option_add_holdpkg_alpm(PyObject *self, PyObject *args)
-{
-  const char *str;
-  
-  if(!PyArg_ParseTuple(args, "s", &str))
-  {
-    PyErr_SetString(alpm_error, "wrong arguments");
-    return NULL;
-  }
-  else
-  {
-    if(check_init() == 1)
-    {
-      alpm_option_add_holdpkg(str);
-      return Py_None;
-    }
-    else
-    {
-      PyErr_SetString(alpm_error, "pyalpm not initialized");
-      return NULL;
-    }
-  }
-}
-
-PyObject * option_remove_holdpkg_alpm(PyObject *self, PyObject *args)
-{
-  const char *str;
-  
-  if(!PyArg_ParseTuple(args, "s", &str))
-  {
-    PyErr_SetString(alpm_error, "wrong arguments");
-    return NULL;
-  }
-  else
-  {
-    if(check_init() == 1)
-    {
-      alpm_option_add_holdpkg(str);
-      return Py_None;
-    }
-    else
-    {
-      PyErr_SetString(alpm_error, "pyalpm not initialized");
-      return NULL;
-    }
-  }
-}
 
 PyObject * alpmversion_alpm(PyObject *self)
 {
@@ -865,8 +792,6 @@ PyMethodDef methods[] = {
   {"getlogfile", option_get_logfile_alpm, METH_VARARGS, "gets the logfile."},
   {"setlogfile", option_set_logfile_alpm, METH_VARARGS, "sets the logfile."},
   {"getlockfile", option_get_lockfile_alpm, METH_VARARGS, "gets the lockfile."},
-  {"getxfercommand", option_get_xfercommand_alpm, METH_VARARGS, "gets the xfercommand value."},
-  {"setxfercommand", option_set_xfercommand_alpm, METH_VARARGS, "sets the xfercommand value."},
   {"getusesyslog", option_get_usesyslog_alpm, METH_VARARGS, "gets usesyslog value."},
   {"setusesyslog", option_set_usesyslog_alpm, METH_VARARGS, "sets usesyslog value."},
   {"getnopassiveftp", option_get_nopassiveftp_alpm, METH_VARARGS, "gets nopassiveftp value."},
@@ -884,8 +809,7 @@ PyMethodDef methods[] = {
   {"removeignorepkg", option_remove_ignorepkg_alpm, METH_VARARGS, "remove an ignorepkg."},
   {"addignoregrps", option_add_ignoregrps_alpm, METH_VARARGS, "add an ignoregrps."},
   {"removeignoregrps", option_remove_ignoregrps_alpm, METH_VARARGS, "remove an ignoregrps."},
-  {"addholdpkg", option_add_holdpkg_alpm, METH_VARARGS, "add a holdpkg."},
-  {"removeholdpkg", option_remove_holdpkg_alpm, METH_VARARGS, "remove a holdpkg."},
+
   {"version", version_alpm, METH_VARARGS, "returns pyalpm version."},
   {"alpmversion", alpmversion_alpm, METH_VARARGS, "returns alpm version."},
   {"checkinit", check_init_alpm, METH_VARARGS, "checks if the library was initialized."},
