@@ -1,11 +1,17 @@
 from distutils.core import setup
 from distutils.core import Extension
+from distutils.core import setup
+from distutils.extension import Extension
+from Cython.Distutils import build_ext
 
-module = Extension('pyalpm',
-                   libraries = ['alpm'],
-                   sources = ['pyalpm.c'])
-                        
+ext_modules=[
+    Extension("pyalpm",
+              ["pyalpm.pyx"],
+              libraries=["alpm"]) # Unix-like specific
+]
 
-setup(name = 'pyalpm',
-      version = '0.1',
-      ext_modules = [module])
+setup(
+  name = "pyalpm",
+  cmdclass = {"build_ext": build_ext},
+  ext_modules = ext_modules
+)
